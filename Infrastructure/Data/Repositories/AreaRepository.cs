@@ -21,9 +21,9 @@ namespace AreaApi.Infrastructure.Data.Repositories
         public async Task<List<Area>> ListAreas()
         {
             List<Area> list = await _context.Area
-                .OrderBy(p => p.Data)
-                .Include(p => p.ApplicationUser)
-                .Include(p => p.Usuarios) // Inclua a propriedade Usuarios
+                .OrderBy(a => a.Data)
+                .Include(a => a.OwnerUser)
+                .Include(a => a.Users) 
                 .ToListAsync();
 
             return list;
@@ -31,14 +31,14 @@ namespace AreaApi.Infrastructure.Data.Repositories
 
         public async Task<List<Area>> ListAreasByApplicationUserId(string applicationUserId)
         {
-            List<Area> list = await _context.Area.Where(p => p.ApplicationUserId.Equals(applicationUserId)).OrderBy(p => p.Data).Include(p => p.ApplicationUser).ToListAsync();
+            List<Area> list = await _context.Area.Where(p => p.OwnerUserId.Equals(applicationUserId)).OrderBy(p => p.Data).Include(p => p.OwnerUser).ToListAsync();
 
             return list;
         }
 
         public async Task<Area> GetAreaById(int areaId)
         {
-            Area area = await _context.Area.Include(p => p.ApplicationUser).FirstOrDefaultAsync((p => p.Id == areaId));
+            Area area = await _context.Area.Include(p => p.OwnerUser).FirstOrDefaultAsync((p => p.Id == areaId));
 
             return area;
         }
@@ -55,39 +55,22 @@ namespace AreaApi.Infrastructure.Data.Repositories
         }
 
 
-        //UPDATE
         public async Task<Area> UpdateArea(Area area)
         {
             _context.Area.Update(area);
             await _context.SaveChangesAsync();
             return area;
         }
-        // AreaRepository
-
-
 
 
         // adicionar usuario na area por ID
         public async Task<Area> AddUserToArea(int areaId, string applicationUserId)
         {
             var area = await _context.Area
-                .Include(a => a.Usuarios)
+                .Include(a => a.Users)
                 .FirstOrDefaultAsync(p => p.Id == areaId);
 
-            if (area == null)
-            {
-                // Área não encontrada, pode tratar apropriadamente
-                return null;
-            }
-
-            var user = await _context.Users.FindAsync(applicationUserId);
-            if (user == null)
-            {
-                // Usuário não encontrado, pode tratar apropriadamente
-                return null;
-            }
-
-            area.Usuarios.Add(new AreaUsers { UserId = user.Id, AreaId = areaId });
+            //area.Users.Add(new ApplicationUser { Id = applicationUserId, AreaId = areaId });
 
             await _context.SaveChangesAsync();
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AreaApi.Domain.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace AreaApi.Infrastructure.Data.Context
 {
@@ -14,7 +15,6 @@ namespace AreaApi.Infrastructure.Data.Context
         }
 
         public DbSet<Area> Area { get; set; }
-        public DbSet<AreaUsers> AreaUsers { get; set; }
         public DbSet<ApplicationUser> User { get; set; }
         public DbSet<ApplicationRole> Role { get; set; }
 
@@ -24,9 +24,9 @@ namespace AreaApi.Infrastructure.Data.Context
 
             modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers").HasKey(t => t.Id);
 
-            modelBuilder.Entity<Area>();
+            modelBuilder.Entity<Area>().HasMany(a => a.Users).WithMany(u => u.Areas);
 
-            modelBuilder.Entity<AreaUsers>();
+            modelBuilder.Entity<Area>().HasOne(a => a.OwnerUser).WithMany(u => u.AreasOwned);
         }
 
     }

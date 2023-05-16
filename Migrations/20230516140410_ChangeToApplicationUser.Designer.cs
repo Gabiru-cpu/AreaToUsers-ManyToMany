@@ -3,34 +3,21 @@ using System;
 using AreaApi.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AreaApi.Migrations
 {
     [DbContext(typeof(MySqlContext))]
-    partial class MySqlContextModelSnapshot : ModelSnapshot
+    [Migration("20230516140410_ChangeToApplicationUser")]
+    partial class ChangeToApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.8");
-
-            modelBuilder.Entity("ApplicationUserArea", b =>
-                {
-                    b.Property<int>("AreasId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UsersId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("AreasId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("ApplicationUserArea");
-                });
 
             modelBuilder.Entity("AreaApi.Domain.Models.ApplicationUser", b =>
                 {
@@ -38,6 +25,9 @@ namespace AreaApi.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AreaId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -86,6 +76,8 @@ namespace AreaApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AreaId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -102,21 +94,21 @@ namespace AreaApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("Conteudo")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("OwnerUserId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Titulo")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Area");
                 });
@@ -262,28 +254,20 @@ namespace AreaApi.Migrations
                     b.HasDiscriminator().HasValue("ApplicationRole");
                 });
 
-            modelBuilder.Entity("ApplicationUserArea", b =>
+            modelBuilder.Entity("AreaApi.Domain.Models.ApplicationUser", b =>
                 {
                     b.HasOne("AreaApi.Domain.Models.Area", null)
-                        .WithMany()
-                        .HasForeignKey("AreasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AreaApi.Domain.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Users")
+                        .HasForeignKey("AreaId");
                 });
 
             modelBuilder.Entity("AreaApi.Domain.Models.Area", b =>
                 {
-                    b.HasOne("AreaApi.Domain.Models.ApplicationUser", "OwnerUser")
-                        .WithMany("AreasOwned")
-                        .HasForeignKey("OwnerUserId");
+                    b.HasOne("AreaApi.Domain.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
 
-                    b.Navigation("OwnerUser");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -337,9 +321,9 @@ namespace AreaApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AreaApi.Domain.Models.ApplicationUser", b =>
+            modelBuilder.Entity("AreaApi.Domain.Models.Area", b =>
                 {
-                    b.Navigation("AreasOwned");
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

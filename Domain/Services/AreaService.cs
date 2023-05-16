@@ -52,19 +52,15 @@ namespace AreaApi.Domain.Services
 
             Area novoArea = new Area();
 
-            novoArea.ApplicationUserId = currentUser.Id;
+            novoArea.OwnerUserId = currentUser.Id;
             novoArea.Data = DateTime.Now;
             novoArea.Titulo = area.Titulo;
             novoArea.Conteudo = area.Conteudo;
 
-            //adicionar o criador na area usando o currentUser na coluna Usuarios
-            novoArea.Usuarios = new List<AreaUsers>
+            //adicionar o criador na area usando o currentUser na coluna Usuarios            
+            novoArea.Users = new List<ApplicationUser>
             {
-                new AreaUsers
-                {
-                    UserId = currentUser.Id,
-                    AreaId = novoArea.Id
-                }
+                currentUser
             };
 
             novoArea = await _areaRepository.CreateArea(novoArea);
@@ -72,18 +68,10 @@ namespace AreaApi.Domain.Services
             return novoArea;
         }
 
-
-
-
         public async Task AtualizarArea(Area area)
         {
             await _areaRepository.UpdateArea(area);
         }
-
-
-
-
-
 
         public async Task AdicionarUsuario(int areaId, string userIdAdd)
         {
@@ -99,7 +87,7 @@ namespace AreaApi.Domain.Services
                 throw new ArgumentException("Usuário atual não encontrado!");
             }
 
-            if (area.ApplicationUserId != currentUser.Id)
+            if (area.OwnerUserId != currentUser.Id)
             {
                 throw new ArgumentException("Apenas o criador da área pode adicionar usuários!");
             }
@@ -110,19 +98,19 @@ namespace AreaApi.Domain.Services
                 throw new ArgumentException("Usuário a ser adicionado não encontrado!");
             }
 
-            if (area.Usuarios == null)
+            if (area.Users == null)
             {
-                area.Usuarios = new List<AreaUsers>();
+                area.Users = new List<ApplicationUser>();
             }
 
             // TEM ALGO ERRADO ELE DEIXA REPETIR O USUARIO
             // Verificar se já existe um usuário com as mesmas propriedades UserId e AreaId
-            if (area.Usuarios.Any(u => u.Id != 0 && u.UserId == userToAdd.Id && u.AreaId == area.Id))
+            if (area.Users.Any(u => u.Id == userToAdd.Id))
             {
                 throw new ArgumentException("Usuário já está na área!");
             }
 
-            area.Usuarios.Add(new AreaUsers { UserId = userToAdd.Id, AreaId = area.Id });
+            area.Users.Add(userToAdd);
 
             await _areaRepository.UpdateArea(area);
         }

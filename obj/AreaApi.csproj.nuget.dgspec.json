@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\Tec\\AreaApi\\AreaApi.csproj": {}
+    "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\AreaToUsers-ManyToMany\\AreaApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\Tec\\AreaApi\\AreaApi.csproj": {
+    "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\AreaToUsers-ManyToMany\\AreaApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\Tec\\AreaApi\\AreaApi.csproj",
+        "projectUniqueName": "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\AreaToUsers-ManyToMany\\AreaApi.csproj",
         "projectName": "AreaApi",
-        "projectPath": "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\Tec\\AreaApi\\AreaApi.csproj",
+        "projectPath": "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\AreaToUsers-ManyToMany\\AreaApi.csproj",
         "packagesPath": "C:\\Users\\Gabriel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\Tec\\AreaApi\\obj\\",
+        "outputPath": "C:\\Users\\Gabriel\\OneDrive\\Área de Trabalho\\AreaToUsers-ManyToMany\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Gabriel\\AppData\\Roaming\\NuGet\\NuGet.Config",

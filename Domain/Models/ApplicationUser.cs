@@ -6,7 +6,8 @@ namespace AreaApi.Domain.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [JsonIgnore]
-        List<Area> Areas { get; set; }
+
+        public virtual List<Area> Areas { get; set; }
+        public virtual List<Area> AreasOwned { get; set; }
     }
 }
